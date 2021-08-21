@@ -1,5 +1,11 @@
-const { app, greetings } = require("../src/server");
+const { app, greetings, server } = require("../src/server");
 const request = require("supertest");
+
+afterAll((done) => {
+	// Close server app connection
+	server.close();
+	done();
+});
 
 describe("greetings", () => {
 	test("Should works properly", async () => {
@@ -8,12 +14,14 @@ describe("greetings", () => {
 		await greetings(ctx, () => {});
 
 		expect(ctx.body).toBe("Hi, Arif Widianto!");
+
+		return {};
 	});
 });
 
 describe("GET /users", () => {
 	test("should return with a status code of 200", async () => {
-		const response = await request(app.callback()).get("/users");
+		const response = await request(server).get("/users");
 
 		// Should return with status code of 200
 		expect(response.status).toBe(200);
@@ -36,6 +44,8 @@ describe("GET /users", () => {
 				},
 			]),
 		);
+
+		return;
 	});
 });
 
@@ -52,13 +62,15 @@ describe("POST /users", () => {
 		];
 
 		for (const body of bodyData) {
-			const response = await request(app.callback()).post("/users").send(body);
+			const response = await request(server).post("/users").send(body);
 			expect(response.status).toBe(422);
 		}
+
+		return;
 	});
 
 	test("should return with given firstName and lastName also with a status code of 200", async () => {
-		const response = await request(app.callback()).post("/users").send({
+		const response = await request(server).post("/users").send({
 			firstName: "Arif",
 			lastName: "Widianto",
 		});
@@ -70,5 +82,7 @@ describe("POST /users", () => {
 				lastName: "Widianto",
 			}),
 		);
+
+		return;
 	});
 });

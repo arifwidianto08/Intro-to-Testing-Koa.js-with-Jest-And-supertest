@@ -4,7 +4,7 @@
 	"main": "src/server.js",
 	"license": "MIT",
 	"scripts": {
-		"test": "jest",
+		"test": "jest --coverage --runInBand",
 		"dev": "nodemon"
 	},
 	"dependencies": {
@@ -21,6 +21,10 @@
 		"testEnvironment": "node",
 		"coveragePathIgnorePatterns": [
 			"/node_modules/"
+		],
+		"coverageReporters": [
+			"text",
+			"text-summary"
 		]
 	}
 }
